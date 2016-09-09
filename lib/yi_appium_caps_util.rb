@@ -127,7 +127,7 @@ class YiAppiumCapsUtil
           end
 
           begin
-            nmap_available = %x[nmap -h]
+            %x[nmap -h]
             puts "Forcing ARP to refresh. This assumes that your device is on the same local network as this computer."
             subnets.uniq.each do |ip|
               puts "Sending nmap broadcast on " + ip[0].to_s
@@ -144,7 +144,6 @@ class YiAppiumCapsUtil
             # Nmap not installed. Let's try arp before giving up
             $ip_address_string = get_arp_table(mac_address)
           end
-
           raise "Could not retrieve IP. Please ensure that:\n1) Device is set to never sleep (General Settings-> Auto-Lock-> Never.\n2) Device is on the same network as this computer." if $ip_address_string == ""
         end
 
@@ -163,7 +162,7 @@ class YiAppiumCapsUtil
     def get_arp_table(mac_address)
 
       $i = 1
-      $num = 5
+      $num = 3
       puts Time.now.strftime("%Y-%m-%d %H:%M:%S") + " Trying to get arp table. Try " + $i.to_s
       begin
         ip_address_string = %x[arp -a | egrep #{mac_address}]
@@ -178,7 +177,6 @@ class YiAppiumCapsUtil
           sleep sleep_time
           retry
         else
-
           return ""
 
         end
